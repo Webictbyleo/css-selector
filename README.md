@@ -3,6 +3,8 @@ CssSelector Component
 
 The CssSelector component converts CSS selectors to XPath expressions.
 
+Additionally, add jquery pseudo selectors support.
+
 Resources
 ---------
 
