@@ -23,8 +23,15 @@
             "email": "webictbyleo@gmail.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/symfony/css-selector"
+        }
+    ],
     "require": {
-        "php": ">=8.1"
+        "php": ">=8.1",
+        "symfony/css-selector": "main"
     },
     "autoload": {
         "psr-4": { "Symfony\\Component\\CssSelector\\": "" },
