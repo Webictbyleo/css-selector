@@ -26,6 +26,12 @@
     "require": {
         "php": ">=8.1"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/symfony/css-selector"
+        }
+    ],
     "autoload": {
         "psr-4": { "Symfony\\Component\\CssSelector\\": "" },
         "exclude-from-classmap": [

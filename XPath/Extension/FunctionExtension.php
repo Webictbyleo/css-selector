@@ -45,6 +45,7 @@ class FunctionExtension extends AbstractExtension
             'has' => $this->translateHas(...),
             'parent' => $this->translateParent(...),
             'eq' => $this->translateEq(...),
+            'not'=> $this->translateNot(...),
         ];
     }
 
@@ -213,6 +214,16 @@ class FunctionExtension extends AbstractExtension
 		return $xpath->addCondition('position() = '.$b);
 		 
 	}
+    public function translateNot(XPathExpr $xpath, FunctionNode $function){
+
+        $argument = $function->getArguments();
+       
+        var_dump($argument);
+        // Accepts multiple arguments
+        die;
+
+
+    }
     public function getName(): string
     {
         return 'function';
