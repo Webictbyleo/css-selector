@@ -168,7 +168,7 @@ class XPathExpr implements \Stringable
 				}
 				
 			}
-			
+		
         return $q;
     }
 }

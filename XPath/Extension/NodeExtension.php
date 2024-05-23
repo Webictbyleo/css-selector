@@ -64,6 +64,8 @@ class NodeExtension extends AbstractExtension
         return [
             'Selector' => $this->translateSelector(...),
             'CombinedSelector' => $this->translateCombinedSelector(...),
+            // Translate match selector using the :is() pseudo-class
+            'Match' => $this->translateMatch(...),
             'Negation' => $this->translateNegation(...),
             'Function' => $this->translateFunction(...),
             'Pseudo' => $this->translatePseudo(...),
@@ -89,9 +91,21 @@ class NodeExtension extends AbstractExtension
         $xpath = $translator->nodeToXPath($node->getSelector());
         $subXpath = $translator->nodeToXPath($node->getSubSelector());
         $subXpath->addNameTest();
-
         if ($subXpath->getCondition()) {
             return $xpath->addCondition(sprintf('not(%s)', $subXpath->getCondition()));
+        }
+
+        return $xpath->addCondition('0');
+    }
+
+    public function translateMatch(Node\MatchNode $node, Translator $translator): XPathExpr
+    {
+        $xpath = $translator->nodeToXPath($node->getSelector());
+        $subXpath = $translator->nodeToXPath($node->getSubSelector());
+        $subXpath->addNameTest();
+        
+        if ($subXpath->getCondition()) {
+            return $xpath->addCondition(sprintf('(%s)', $subXpath->getCondition()));
         }
 
         return $xpath->addCondition('0');

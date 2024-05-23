@@ -210,9 +210,10 @@ class Parser implements ParserInterface
                 $stream->getNext();
                 $stream->skipWhitespace();
 
-                if ('not' === strtolower($identifier)) {
+                if (in_array(strtolower($identifier),['not','is'])) {
                     if ($insideNegation) {
-                        throw SyntaxErrorException::nestedNot();
+                        // We want to support nested :not() and :is() pseudo-classes
+                        //throw SyntaxErrorException::nestedNot();
                     }
 
                     [$argument, $argumentPseudoElement] = $this->parseSimpleSelector($stream, true);
@@ -225,8 +226,11 @@ class Parser implements ParserInterface
                     if (!$next->isDelimiter([')'])) {
                         throw SyntaxErrorException::unexpectedToken('")"', $next);
                     }
-
+                    if(stripos($identifier,'is')===0){
+                        $result = new Node\MatchNode($result, $argument);
+                    }else{
                     $result = new Node\NegationNode($result, $argument);
+                    }
                 } else {
                     $arguments = [];
                     $next = null;
