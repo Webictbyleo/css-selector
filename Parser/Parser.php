@@ -177,7 +177,6 @@ class Parser implements ParserInterface
                 if ($stream->getPeek()->isDelimiter([':'])) {
                     $stream->getNext();
                     $pseudoElement = $stream->getNextIdentifier();
-
                     continue;
                 }
 
@@ -191,7 +190,13 @@ class Parser implements ParserInterface
                 }
 
                 if (!$stream->getPeek()->isDelimiter(['('])) {
+                    if($identifier=='first'){
+                        $result = new Node\FirstNode($result, $identifier);
+                    }else if($identifier=='last'){
+                        $result = new Node\LastNode($result, $identifier);
+                    }else{
                     $result = new Node\PseudoNode($result, $identifier);
+                    }
                     if ('Pseudo[Element[*]:scope]' === $result->__toString()) {
                         $used = \count($stream->getUsed());
                         if (!(2 === $used

@@ -66,6 +66,9 @@ class NodeExtension extends AbstractExtension
             'CombinedSelector' => $this->translateCombinedSelector(...),
             // Translate match selector using the :is() pseudo-class
             'Match' => $this->translateMatch(...),
+            // Match :first and :last pseudo-classes
+            'First' => $this->translateFirst(...),
+            'Last' => $this->translateLast(...),
             'Negation' => $this->translateNegation(...),
             'Function' => $this->translateFunction(...),
             'Pseudo' => $this->translatePseudo(...),
@@ -88,18 +91,20 @@ class NodeExtension extends AbstractExtension
 
     public function translateNegation(Node\NegationNode $node, Translator $translator): XPathExpr
     {
+       
         $xpath = $translator->nodeToXPath($node->getSelector());
         $subXpath = $translator->nodeToXPath($node->getSubSelector());
         $subXpath->addNameTest();
+
         if ($subXpath->getCondition()) {
             return $xpath->addCondition(sprintf('not(%s)', $subXpath->getCondition()));
         }
 
         return $xpath->addCondition('0');
     }
-
     public function translateMatch(Node\MatchNode $node, Translator $translator): XPathExpr
     {
+        
         $xpath = $translator->nodeToXPath($node->getSelector());
         $subXpath = $translator->nodeToXPath($node->getSubSelector());
         $subXpath->addNameTest();
@@ -111,6 +116,17 @@ class NodeExtension extends AbstractExtension
         return $xpath->addCondition('0');
     }
 
+    public function translateFirst(Node\FirstNode $node, Translator $translator): XPathExpr
+    {
+        $xpath = $translator->nodeToXPath($node->getSelector());
+        return $xpath->addCondition('1');  
+    }
+
+    public function translateLast(Node\LastNode $node, Translator $translator): XPathExpr
+    {
+        $xpath = $translator->nodeToXPath($node->getSelector());
+        return $xpath->addCondition('last()');  
+    }
     public function translateFunction(Node\FunctionNode $node, Translator $translator): XPathExpr
     {
         $xpath = $translator->nodeToXPath($node->getSelector());

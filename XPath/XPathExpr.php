@@ -142,10 +142,6 @@ class XPathExpr implements \Stringable
      */
     public function __toString(): string
     {
-			if(!empty($this->condition)){
-			$pr1 = '[';
-			$pr2 = ']';
-			}
 		
         $path = rtrim($this->path,'%ns').'%ns'.$this->element;
 		
@@ -154,21 +150,14 @@ class XPathExpr implements \Stringable
 		$this->blocked = false;
 		}
 		
-        $condition = null === $this->condition || '' === $this->condition ? '' : $this->condition;
+       // $condition = null === $this->condition || '' === $this->condition ? '' : $this->condition;
+		$condition = null === $this->condition || '' === $this->condition ? '' : '['.$this->condition.']';
 		
-		if($condition and !in_array($condition,array(':first',':last')) and strrpos($condition,']')!==strlen($condition)-1){
-			$condition = $pr1.$condition.$pr2;
-		}
+			//$condition = $pr1.$condition.$pr2;
+		
 		$q = $path.$condition;
-			if(!empty($condition) and preg_match('/(\:first|\:last)/',$condition,$m)){
-				if($m[1]==':first'){
-				$q = '('.str_replace(':first','',$q).')[1]';
-				}else{
-				$q = '('.str_replace(':last','',$q).')[last()]';
-				}
-				
-			}
-		
+			
+			
         return $q;
     }
 }
